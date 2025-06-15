@@ -137,7 +137,7 @@ const HeroBottomBar: React.FC<HeroBottomBarProps> = ({
       },
     },
   }}
-      className="relative w-full h-[88vh] md:h-screen overflow-hidden"
+      className="relative w-full h-[86vh] md:h-screen overflow-hidden"
     >
       {/* Background - Either Carousel or Single Image */}
       {isCarousel ? (
