@@ -1,0 +1,1 @@
+export const cubicBezierArr = [0.17, 0.55, 0.55, 1]
