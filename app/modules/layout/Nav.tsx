@@ -75,7 +75,7 @@ const logoLink = useMemo(() => {
             animate="open"
             exit="closed"
             variants={menuVariants}
-            className="fixed top-0 right-0 w-3/4 md:w-1/2 h-full bg-[#171719] z-40 pt-32"
+            className="fixed top-0 right-0 w-3/4 md:w-1/2 h-full bg-[#171719] z-[100] pt-32"
           >
             <div className="px-8">
               <ul className="space-y-8">
