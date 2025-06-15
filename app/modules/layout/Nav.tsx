@@ -32,7 +32,9 @@ const logoLink = useMemo(() => {
     { label: "Journal", href: "#journal" },
     { label: "Contact", href: "#contact" }
   ]
+
 //test for working branch
+
   return (
     <>
       <motion.nav
