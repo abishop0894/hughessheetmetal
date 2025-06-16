@@ -80,11 +80,11 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({
               </dl>
             </div>
           </div>
-          <div className="flex items-start justify-end lg:order-first">
+          <div className="flex items-start justify-end rounded-xl lg:order-first">
             <Carousel className="w-3xl relative max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228">
-  <CarouselContent>
+  <CarouselContent className='rounded-xl'>
 {images.map((image, index) => (
-  <CarouselItem key={index}>
+  <CarouselItem key={index} className='rounded-xl'>
     <Image src={image} alt="Product screenshot" width={2432} height={1442} className="w-3xl max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228" />
   </CarouselItem>
 ))}
