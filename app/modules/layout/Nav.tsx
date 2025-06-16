@@ -26,11 +26,13 @@ const logoLink = useMemo(() => {
 }, [])
 
   const menuItems = [
-    { label: "Services", href: "/services" },
+    { label: "Home", href: "/" },
+     { label: "Services", href: "/services" },
     { label: "About", href: "/about" },
     { label: "Our Work", href: "/portfolio" },
     { label: "Contact", href: "/contact" },
-    { label: "Careers", href: "/careers" }
+    { label: "Careers", href: "/careers" },
+   
   ]
 
 //test for working branch
@@ -64,7 +66,8 @@ const logoLink = useMemo(() => {
               toggled={isOpen}
               toggle={setIsOpen}
               color="white"
-              size={20}
+
+              size={40}
             />
           </div>
         </div>
