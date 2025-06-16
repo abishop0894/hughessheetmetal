@@ -37,7 +37,7 @@ export const navVariants: Variants = {
 }
 
 export const logoVariants: Variants = {
-  initial: { scaleY: 1.5 },
+  initial: { scaleY: 1.2 },
   scrolled: { 
     scaleY: 1,
     transition: {
