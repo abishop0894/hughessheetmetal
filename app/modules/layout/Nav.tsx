@@ -46,7 +46,7 @@ const logoLink = useMemo(() => {
         className="fixed top-0 left-0 w-full bg-black z-[150]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`flex items-center justify-between transition-all duration-100 ${isScrolled ? 'h-[90px]' : 'h-[110px]'}`}>
+          <div className={`flex items-center justify-between transition-all duration-100 ${isScrolled ? 'h-[90px]' : 'h-[92px]'}`}>
              <motion.div
               variants={logoVariants}
               initial="initial"
@@ -58,7 +58,7 @@ const logoLink = useMemo(() => {
                 alt="logo" 
                 width={1000} 
                 height={1000} 
-                className={`transition-all duration-100 ${isScrolled ? 'w-[200px] h-[60px]' : 'w-[200px] h-[61px]'}`} 
+                className={`transition-all duration-100 ${isScrolled ? 'w-[200px] h-[60px]' : 'w-[200px] h-[60.5px]'}`} 
               />
             </motion.div>
             

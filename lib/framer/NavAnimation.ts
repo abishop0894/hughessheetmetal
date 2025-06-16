@@ -35,9 +35,9 @@ export const navVariants: Variants = {
     },
   },
 }
-
+//scaleY changed
 export const logoVariants: Variants = {
-  initial: { scaleY: 1.5 },
+  initial: { scaleY: 1.2 },
   scrolled: { 
     scaleY: 1,
     transition: {
@@ -47,6 +47,8 @@ export const logoVariants: Variants = {
     }
   }
 }
+
+//
 
 export const menuVariants: Variants = {
   closed: { 
