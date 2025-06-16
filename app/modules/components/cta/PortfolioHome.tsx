@@ -1,245 +1,373 @@
 "use client"
-import React, { useState } from 'react'
-import { ChevronRightIcon, ChevronLeftIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import gsap from 'gsap';
 
-interface Technology {
-  name: string
-  src: string
+interface SlideData {
+  id: number;
+  image: string;
+  title: string;
+  highlight: string;
+  link: string;
+  label: string;
 }
 
-interface Project {
-  id: number
-  companyLogo: string
-  title: string
-  description: string
-  technologies: Technology[]
-  livePreviewHref: string
-  caseStudyHref: string
+interface SliderSettings {
+  currentSlide: number;
+  totalSlides: number;
+  animating: boolean;
+  autoPlay: boolean;
+  autoPlaySpeed: number;
+  transitionSpeed: number;
+  ease: string;
+  timeline: ReturnType<typeof gsap.timeline>;
+  imageScale: ReturnType<typeof gsap.to> | null;
 }
 
-interface PortfolioCarouselProps {
-  tagline?: string
-  heading?: string
-  description?: string
-  viewProjectsText?: string
-  viewProjectsHref?: string
-  viewTestimonialsText?: string
-  viewTestimonialsHref?: string
-  projects?: Project[][]
-}
+const PortfolioHome: React.FC = () => {
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [currentSlide, setCurrentSlide] = useState<number>(1);
+  const settingsRef = useRef<SliderSettings>({
+    currentSlide: 1,
+    totalSlides: 3,
+    animating: false,
+    autoPlay: true,
+    autoPlaySpeed: 8,
+    transitionSpeed: 2.75,
+    ease: 'expo',
+    timeline: gsap.timeline({}),
+    imageScale: null,
+  });
 
-const PortfolioCarousel: React.FC<PortfolioCarouselProps> = ({
-  tagline = "Trusted Worldwide",
-  heading = "Trusted by over 100 companies and 10,000+ freelancers",
-  description = "Our rigorous security and compliance standards are at the heart of all we do. We work tirelessly to protect you and your customers.",
-  viewProjectsText = "View all projects",
-  viewProjectsHref = "#",
-  viewTestimonialsText = "View all testimonials", 
-  viewTestimonialsHref = "#",
-  projects = [
-    [
-      {
-        id: 1,
-        companyLogo: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/customers/ford.svg",
-        title: "Official website",
-        description: "Flowbite helps you connect with friends, family and communities of people who share your interests.",
-        technologies: [
-          { name: "Flowbite", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/flowbite.svg" },
-          { name: "Tailwind CSS", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/tailwind-css.svg" },
-          { name: "HTML5", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/html5.svg" },
-          { name: "CSS3", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/css-3.svg" }
-        ],
-        livePreviewHref: "#",
-        caseStudyHref: "#"
-      },
-      {
-        id: 2,
-        companyLogo: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/customers/fedex.svg",
-        title: "Management system",
-        description: "Flowbite helps you connect with friends, family and communities of people who share your interests.",
-        technologies: [
-          { name: "TypeScript", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/typescript.svg" },
-          { name: "Java", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/java.svg" },
-          { name: "React", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/react.svg" },
-          { name: "AWS", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/amazon-web-services.svg" }
-        ],
-        livePreviewHref: "#",
-        caseStudyHref: "#"
-      },
-      {
-        id: 3,
-        companyLogo: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/customers/intel.svg",
-        title: "Logo design",
-        description: "Flowbite helps you connect with friends, family and communities of people who share your interests.",
-        technologies: [
-          { name: "Figma", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/figma.svg" },
-          { name: "Adobe Illustrator", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/illustrator.svg" }
-        ],
-        livePreviewHref: "#",
-        caseStudyHref: "#"
+  const slides: SlideData[] = [
+    {
+      id: 1,
+      image: "https://dbpadventures.kinsta.cloud/wp-content/uploads/2020/04/ngor-senegal-dronebillede.jpg",
+      title: "New Ducts and VAVs",
+      highlight: "Duct Work",
+      link: "Like what you see?",
+      label: "Duct Work"
+    },
+    {
+      id: 2,
+      image: "https://dbpadventures.kinsta.cloud/wp-content/uploads/2020/04/ngor-island-drone.jpg",
+      title: "New HVAC System",
+      highlight: "HVAC System",
+      link: "Like what you see?",
+      label: "HVAC System"
+    },
+    {
+      id: 3,
+      image: "https://dbpadventures.kinsta.cloud/wp-content/uploads/2020/04/strand-ngor-senegal.jpg",
+      title: "Fabrication used for stadium",
+      highlight: "Stadium Fabrication",
+      link: "Like what you see?",
+      label: "Stadium Fabrication"
+    }
+  ];
+
+  const updateNav = useCallback((from: number, to: number) => {
+    const settings = settingsRef.current;
+    
+    // Update previous nav item
+    gsap.to(`.nav-timer-${from}`, settings.transitionSpeed, {
+      width: 55,
+      ease: settings.ease + '.inOut',
+    });
+    gsap.to(`.nav-label-${from}`, settings.transitionSpeed, {
+      opacity: 0,
+      ease: settings.ease + '.inOut',
+    });
+    
+    // Update current nav item
+    gsap.to(`.nav-timer-${to}`, settings.transitionSpeed, {
+      width: 95,
+      ease: settings.ease + '.inOut',
+    });
+    gsap.to(`.nav-label-${to}`, settings.transitionSpeed, {
+      opacity: 1,
+      ease: settings.ease + '.inOut',
+    });
+    
+    // Reset progress bar
+    gsap.to(`.timer-progress-${from}`, settings.transitionSpeed, {
+      x: '100%',
+      ease: settings.ease + '.inOut'
+    });
+  }, []);
+
+  const slideAnimation = useCallback((from: number, to: number, dir: 'next' | 'prev') => {
+    const settings = settingsRef.current;
+    settings.animating = true;
+
+    updateNav(from, to);
+
+    const fromSlide = `.slide-${from}`;
+    const toSlide = `.slide-${to}`;
+
+    settings.timeline.clear();
+    settings.timeline.play(0);
+
+    settings.timeline
+      .set(toSlide, { display: 'block' })
+      .to(`${fromSlide} .slide-content > *`, (settings.transitionSpeed / 100) * 40, {
+        y: -20,
+        opacity: 0,
+        ease: settings.ease + '.in',
+        stagger: 0.1,
+      }, 'slideAnimation')
+      .fromTo(`${toSlide} .slide-content > *`, (settings.transitionSpeed / 100) * 40, {
+        y: 20,
+        opacity: 0,
+      }, {
+        y: 0,
+        opacity: 1,
+        ease: 'power3.out',
+        stagger: 0.1,
+      }, '>0.5')
+      .fromTo(`${fromSlide} .slide-image`, settings.transitionSpeed, {
+        display: 'block',
+        x: '0%',
+      }, {
+        x: dir === 'next' ? '-100%' : '100%',
+        ease: settings.ease + '.inOut',
+      }, 'slideAnimation')
+      .fromTo(`${fromSlide} .slide-image img`, settings.transitionSpeed, {
+        transformOrigin: 'center',
+        x: '0%',
+      }, {
+        x: dir === 'next' ? '50%' : '-50%',
+        ease: settings.ease + '.inOut',
+      }, 'slideAnimation')
+      .fromTo(`${toSlide} .slide-image img`, settings.transitionSpeed, {
+        transformOrigin: 'center',
+        x: dir === 'next' ? '-50%' : '50%',
+      }, {
+        x: '0%',
+        ease: settings.ease + '.inOut',
+      }, 'slideAnimation')
+      .fromTo(`${toSlide} .slide-image`, settings.transitionSpeed, {
+        display: 'block',
+        transformOrigin: 'right center',
+        x: dir === 'next' ? '100%' : '-100%',
+      }, {
+        x: '0%',
+        ease: settings.ease + '.inOut',
+        onComplete: () => {
+          settings.animating = false;
+          gsap.set(fromSlide, { display: 'none' });
+          if (settings.imageScale) {
+            settings.imageScale.kill();
+          }
+          gsap.set(`${fromSlide} .slide-image img`, { scale: 1 });
+          settings.imageScale = gsap.to(`${toSlide} .slide-image img`, 15, {
+            scale: 1.1,
+            ease: "sine.inOut",
+            yoyo: true,
+            yoyoEase: true,
+            repeat: -1
+          });
+        }
+      }, 'slideAnimation');
+
+    if (settings.autoPlay) {
+      const progressEl = `.timer-progress-${to}`;
+      settings.timeline.fromTo(progressEl, settings.autoPlaySpeed - settings.transitionSpeed, {
+        x: '-100%'
+      }, {
+        x: 0,
+        ease: 'none',
+        onComplete: () => {
+          changeSlide('next');
+        }
+      }, '>');
+    }
+  }, [updateNav]);
+
+  const changeSlide = useCallback((dir: 'next' | 'prev') => {
+    const settings = settingsRef.current;
+    if (settings.animating) return;
+    
+    const animateFrom = settings.currentSlide;
+    if (dir === 'next') {
+      if (settings.currentSlide >= settings.totalSlides) {
+        settings.currentSlide = 1;
+      } else {
+        settings.currentSlide++;
       }
-    ],
-    [
-      {
-        id: 4,
-        companyLogo: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/customers/spotify.svg",
-        title: "Music platform",
-        description: "Streamlined music discovery and playlist management for millions of users worldwide.",
-        technologies: [
-          { name: "React", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/react.svg" },
-          { name: "TypeScript", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/typescript.svg" },
-          { name: "Node.js", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/html5.svg" }
-        ],
-        livePreviewHref: "#",
-        caseStudyHref: "#"
-      },
-      {
-        id: 5,
-        companyLogo: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/customers/netflix.svg",
-        title: "Streaming dashboard",
-        description: "Content management and analytics dashboard for streaming platform administrators.",
-        technologies: [
-          { name: "React", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/react.svg" },
-          { name: "AWS", src: "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/technologies/amazon-web-services.svg" }
-        ],
-        livePreviewHref: "#",
-        caseStudyHref: "#"
+    } else {
+      if (settings.currentSlide <= 1) {
+        settings.currentSlide = settings.totalSlides;
+      } else {
+        settings.currentSlide--;
       }
-    ]
-  ]
-}) => {
-  const [currentSlide, setCurrentSlide] = useState(0)
+    }
+    
+    setCurrentSlide(settings.currentSlide);
+    slideAnimation(animateFrom, settings.currentSlide, dir);
+  }, [slideAnimation]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % projects.length)
-  }
+  const jumpToSlide = useCallback((slideNum: number) => {
+    const settings = settingsRef.current;
+    if (settings.animating || slideNum === settings.currentSlide) return;
+    
+    const animateFrom = settings.currentSlide;
+    settings.currentSlide = slideNum;
+    setCurrentSlide(slideNum);
+    
+    const dir = slideNum > animateFrom ? 'next' : 'prev';
+    slideAnimation(animateFrom, settings.currentSlide, dir);
+  }, [slideAnimation]);
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + projects.length) % projects.length)
-  }
+  const autoPlay = useCallback(() => {
+    const settings = settingsRef.current;
+    settings.autoPlay = true;
 
-  const linkItems = [
-    { text: viewProjectsText, href: viewProjectsHref },
-    { text: viewTestimonialsText, href: viewTestimonialsHref }
-  ]
+    const progressEl = `.timer-progress-${settings.currentSlide}`;
+    settings.timeline.fromTo(progressEl, settings.autoPlaySpeed - settings.transitionSpeed, {
+      x: '-100%'
+    }, {
+      x: 0,
+      ease: 'none',
+      delay: 0.5,
+      onComplete: () => {
+        changeSlide('next');
+      }
+    });
+  }, [changeSlide]);
 
-  const renderTechnology = (tech: Technology, index: number) => (
-    <div key={index} className="p-1 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800" title={tech.name}>
-      <img 
-        className="object-contain w-auto h-8" 
-        src={tech.src} 
-        alt={tech.name}
-      />
-    </div>
-  )
+  const stopAutoPlay = useCallback(() => {
+    const settings = settingsRef.current;
+    if (settings.autoPlay) {
+      settings.timeline.progress(1);
+    }
+    settings.autoPlay = false;
+  }, []);
 
-  const renderProject = (project: Project) => (
-    <div key={project.id} className="space-y-4">
-      <img className="object-contain w-auto h-12" src={project.companyLogo} alt={`${project.title} logo`} />
-      
-      <div className="space-y-1">
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-          {project.title}
-        </h3>
-        <a 
-          href={project.livePreviewHref}
-          className="inline-flex items-center text-lg font-medium text-blue-600 hover:underline dark:text-blue-500"
-        >
-          Live preview
-          <ArrowTopRightOnSquareIcon className="w-5 h-5 ml-2.5" />
-        </a>
-      </div>
+  useEffect(() => {
+    const settings = settingsRef.current;
+    settings.totalSlides = slides.length;
+    
+    // Initialize image scaling animation
+    settings.imageScale = gsap.to('.slide-1 .slide-image img', 15, {
+      scale: 1.1,
+      ease: "sine.inOut",
+      yoyo: true,
+      yoyoEase: true,
+      repeat: -1
+    });
 
-      <p className="text-lg font-normal text-gray-500 dark:text-gray-400">
-        {project.description}
-      </p>
+    if (settings.autoPlay) {
+      autoPlay();
+    }
 
-      <div className="flex items-center gap-2.5">
-        {project.technologies.map((tech, index) => renderTechnology(tech, index))}
-      </div>
-
-      <a 
-        href={project.caseStudyHref}
-        className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-center text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-      >
-        View case study
-      </a>
-    </div>
-  )
+    return () => {
+      if (settings.imageScale) {
+        settings.imageScale.kill();
+      }
+      settings.timeline.kill();
+    };
+  }, [autoPlay]);
 
   return (
-    <section className="bg-white dark:bg-gray-900 antialiased">
-      <div className="max-w-screen-xl px-4 py-8 mx-auto lg:px-6 sm:py-16 lg:py-24">
-        <div className="max-w-2xl space-y-6">
-          <div>
-            <p className="text-lg font-medium leading-none text-blue-600 dark:text-blue-500">
-              {tagline}
-            </p>
-            <h2 className="mt-3 text-3xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-4xl dark:text-white">
-              {heading}
-            </h2>
-            <p className="mt-4 text-base font-normal text-gray-500 sm:text-xl dark:text-gray-400">
-              {description}
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {linkItems.map((item, index) => (
-              <a 
-                key={index}
-                href={item.href}
-                className="flex items-center text-base font-medium text-blue-600 hover:underline dark:text-blue-500"
+    <div 
+      ref={sliderRef}
+      className="relative w-full min-h-screen bg-slate-800 text-white flex items-start overflow-hidden"
+    >
+      {/* UI Controls */}
+      <div className="relative z-10 max-w-6xl min-w-[60%] mx-auto mt-[10%] flex justify-between">
+        {/* Navigation Points */}
+        <div className="flex flex-col">
+          {slides.map((slide, index) => (
+            <div
+              key={slide.id}
+              className="flex items-center mb-2.5 font-black cursor-pointer"
+              onClick={() => {
+                stopAutoPlay();
+                jumpToSlide(index + 1);
+              }}
+            >
+              <span className="text-white">
+                {String(slide.id).padStart(2, '0')}
+              </span>
+              <div 
+                className={`nav-timer-${slide.id} relative mx-1.5 h-px bg-white/50 overflow-hidden transition-all duration-1000 ${
+                  currentSlide === slide.id ? 'w-24' : 'w-14'
+                }`}
               >
-                {item.text}
-                <ChevronRightIcon className="w-5 h-5 ml-2" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 sm:mt-12 lg:mt-16">
-          <div className="relative overflow-hidden h-[400px]">
-            {projects.map((slideProjects, index) => (
-              <div
-                key={index}
-                className={`${
-                  index === currentSlide ? 'block' : 'hidden'
-                } duration-700 ease-in-out bg-white dark:bg-gray-900`}
-              >
-                <div className="grid grid-cols-1 gap-20 sm:grid-cols-2 xl:grid-cols-3">
-                  {slideProjects.map(renderProject)}
-                </div>
+                <div 
+                  className={`timer-progress-${slide.id} absolute top-0 left-0 bg-white h-px w-full transform -translate-x-full`}
+                />
               </div>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center mt-2">
-            <button
-              type="button"
-              onClick={prevSlide}
-              className="flex items-center justify-center h-full mr-4 cursor-pointer group focus:outline-none"
-            >
-              <span className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                <ChevronLeftIcon className="w-7 h-7" />
-                <span className="sr-only">Previous</span>
+              <span 
+                className={`nav-label-${slide.id} font-normal transition-opacity duration-1000 ${
+                  currentSlide === slide.id ? 'opacity-100' : 'opacity-0'
+                }`}
+              >
+                {slide.label}
               </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={nextSlide}
-              className="flex items-center justify-center h-full cursor-pointer group focus:outline-none"
-            >
-              <span className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
-                <ChevronRightIcon className="w-7 h-7" />
-                <span className="sr-only">Next</span>
-              </span>
-            </button>
-          </div>
+            </div>
+          ))}
+        </div>
+        
+        {/* Arrow Controls */}
+        <div className="flex">
+          <button
+            className="w-12 h-12 rounded-full border border-white opacity-50 bg-white ml-5 flex justify-center items-center text-black hover:opacity-75 transition-opacity"
+            onClick={() => {
+              stopAutoPlay();
+              changeSlide('prev');
+            }}
+          >
+            &lt;
+          </button>
+          <button
+            className="w-12 h-12 rounded-full border border-white opacity-50 bg-white ml-5 flex justify-center items-center text-black hover:opacity-75 transition-opacity"
+            onClick={() => {
+              stopAutoPlay();
+              changeSlide('next');
+            }}
+          >
+            &gt;
+          </button>
         </div>
       </div>
-    </section>
-  )
-}
 
-export default PortfolioCarousel
+      {/* Slides */}
+      <div className="absolute inset-0">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`slide-${slide.id} absolute inset-0 w-full h-full ${
+              currentSlide === slide.id ? 'block' : 'hidden'
+            }`}
+            data-slide={slide.id}
+          >
+            {/* Background Image */}
+            <div className="slide-image absolute inset-0 w-full h-full overflow-hidden">
+              <img
+                src={slide.image}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-50"
+              />
+            </div>
+            
+            {/* Content Container */}
+            <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+              <div className="slide-content pt-25 max-w-6xl min-w-[60%] font-sans">
+                <div className="text-5xl max-w-2xl leading-tight font-semibold">
+                  {slide.title} <span className="text-yellow-400">{slide.highlight}</span>
+                </div>
+                <div className="mt-6 text-lg">
+                  {slide.link}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+export default PortfolioHome

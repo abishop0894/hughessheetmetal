@@ -1,16 +1,15 @@
 import HomeHero from "./modules/components/heros/HomeHero";
-import Nav from "./modules/layout/Nav";
 import CtaRow from "./modules/components/cta/CtaRow";
 import  HomeStats  from "./modules/components/cta/HomeStats";
 import LogoCta from "./modules/components/cta/LogoCta";
 import PortfolioHome from "./modules/components/cta/PortfolioHome";
 import ServicesHome from "./modules/components/cta/ServicesHome";
 import ContactForm from "./modules/components/contact/ContactForm";
+import Page from "./modules/layout/Page";
 
 export default function Home() {
   return (
-    <div className="overflow-x-hidden ">
-      <Nav />
+    <Page>
       <HomeHero />
      <ServicesHome />
       <CtaRow />
@@ -18,6 +17,6 @@ export default function Home() {
       <HomeStats />
       <LogoCta />
       <ContactForm />
-    </div>
+    </Page>
   );
 }
