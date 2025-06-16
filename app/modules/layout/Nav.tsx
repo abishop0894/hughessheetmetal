@@ -26,11 +26,11 @@ const logoLink = useMemo(() => {
 }, [])
 
   const menuItems = [
-    { label: "Studio", href: "#studio" },
-    { label: "Services", href: "#services" },
-    { label: "Work", href: "#work" },
-    { label: "Journal", href: "#journal" },
-    { label: "Contact", href: "#contact" }
+    { label: "Services", href: "/services" },
+    { label: "About", href: "/about" },
+    { label: "Our Work", href: "/portfolio" },
+    { label: "Contact", href: "/contact" },
+    { label: "Careers", href: "/careers" }
   ]
 
 //test for working branch
