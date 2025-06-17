@@ -26,6 +26,7 @@ const PortfolioComponent: React.FC = () => {
       alt: 'Vintage camera',
       caption: 'image #1'
     },
+    
     {
       id: 2,
       src: 'https://images.unsplash.com/photo-1580637592264-9024a17b9bd8?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ',
