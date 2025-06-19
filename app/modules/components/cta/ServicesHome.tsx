@@ -118,7 +118,7 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({
   <CarouselItem key={image.id} className='rounded-xl relative'>
 
     <Image  src={image.image} alt={image.alt} width={2432} height={1442} className="w-3xl  max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228" />
- <h4 className='text-black text-[80px] p-0 m-0  font-bold absolute bottom-[200px] z-[20] rotate-[-90deg] -right-[0]'>{image.title}</h4> 
+ <h4 className='text-black text-[80px] font-bold absolute bottom-[220px] z-[20] rotate-[-90deg] right-12 transform translate-x-1/2'>{image.title}</h4> 
   </CarouselItem>
 ))}
  </CarouselContent>
