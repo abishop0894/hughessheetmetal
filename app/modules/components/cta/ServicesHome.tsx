@@ -24,29 +24,44 @@ interface FeaturesSectionProps {
   features?: Feature[]
 }
 
+interface Image {
+  id: number
+  image: string
+  title: string
+ 
+}
+
 const images = [
 {
   id: 1,
   image: "https://hughessheetmetal.s3.us-east-1.amazonaws.com/clients/IMG_2268.jpg",
   title: "Fabrication",
+  alt: `Fabrication    `,
 },
 {
   id: 2,
   image: "https://hughessheetmetal.s3.us-east-1.amazonaws.com/clients/IMG_2268.jpg",
   title: "Welding",
+  alt: `Welding     `,
 },
 {
   id: 3,
   image: "https://hughessheetmetal.s3.us-east-1.amazonaws.com/clients/IMG_2268.jpg",
   title: "Sheet Metal",
+  alt: `Sheet Metal`,
 },
 { 
   id: 4,
   image: "https://hughessheetmetal.s3.us-east-1.amazonaws.com/clients/IMG_2268.jpg",
   title: "Scraping",
+  alt: `Scraping     `,
 }
 
 ]
+
+
+
+
 
 const FeaturesSection: React.FC<FeaturesSectionProps> = ({
   tagline = "Deploy faster",
@@ -100,9 +115,10 @@ const FeaturesSection: React.FC<FeaturesSectionProps> = ({
             <Carousel className="w-3xl relative max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228">
   <CarouselContent className='rounded-xl'>
 {images.map((image) => (
-  <CarouselItem key={image.id} className='rounded-xl'>
-    <Image key={image.id} src={image.image} alt="Product screenshot" width={2432} height={1442} className="w-3xl relative max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228" />
-  <h2 key={image.id} className='text-black text-[100px]  font-bold absolute bottom-[200px] z-[20] rotate-[-90deg] -right-[135px]'>{image.title}</h2>
+  <CarouselItem key={image.id} className='rounded-xl relative'>
+
+    <Image  src={image.image} alt={image.alt} width={2432} height={1442} className="w-3xl  max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228" />
+ <h4 className='text-black text-[80px] p-0 m-0  font-bold absolute bottom-[200px] z-[20] rotate-[-90deg] -right-[0]'>{image.title}</h4> 
   </CarouselItem>
 ))}
  </CarouselContent>
