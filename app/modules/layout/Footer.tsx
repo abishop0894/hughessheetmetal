@@ -26,7 +26,7 @@ const Footer: React.FC = () => {
   const footerData: FooterData = {
     brand: {
       name: "Hughes Sheet Metal",
-      logo: "/hughes-logo.svg", // Path to your Flowbite logo
+      logo: "https://hughessheetmetal.s3.us-east-1.amazonaws.com/a58cd650-4dff-46f3-842e-a9bbdfebc811.png.png", 
       description: "Hughes Sheet Metal is a sheet metal fabrication company that specializes in custom sheet metal fabrication and sheet metal fabrication services.",
       href: "#"
     },
