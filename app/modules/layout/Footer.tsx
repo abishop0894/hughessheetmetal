@@ -120,11 +120,11 @@ const Footer: React.FC = () => {
               <Image
                 src={footerData.brand.logo}
                 alt={`${footerData.brand.name} logo`}
-                width={32}
-                height={32}
+                width={500}
+                height={500}
                 className="mr-2"
               />
-              {footerData.brand.name}
+             
             </a>
             <p className="my-4 font-light text-gray-500 dark:text-gray-400">
               {footerData.brand.description}
