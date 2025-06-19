@@ -6,10 +6,11 @@ import PortfolioHome from "./modules/components/cta/PortfolioHome";
 import ServicesHome from "./modules/components/cta/ServicesHome";
 import ContactForm from "./modules/components/contact/ContactForm";
 import Page from "./modules/layout/Page";
+import ComingSoonPage from "./modules/components/coming-soon/ComingSoonComp";
 
 export default function Home() {
   return (
-    <Page>
+    process.env.NEXT_PUBLIC_PROJECT_STATE === "development" ? <ComingSoonPage /> : <Page>
       <HomeHero />
        <HomeStats />
      <ServicesHome />
@@ -19,5 +20,6 @@ export default function Home() {
       <LogoCta />
       <ContactForm />
     </Page>
+  
   );
 }
